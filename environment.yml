@@ -145,4 +145,4 @@ dependencies:
     - subprocess32==3.5.4
     - torch-geometric==1.7.0
     - wandb==0.10.30
-prefix: /home/username/anaconda3/envs/patching
+prefix: /pasteur/u/esui/miniconda3/envs/patching

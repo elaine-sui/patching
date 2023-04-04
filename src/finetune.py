@@ -14,11 +14,13 @@ from src.heads import get_classification_head
 
 import src.datasets as datasets
 
+import wandb
+
 
 def finetune(args):
     # Check if checkpoints already exist
-    zs_path = os.path.join(args.save, args.train_dataset, 'checkpoint_0.pt')  
-    ft_path = os.path.join(args.save, args.train_dataset, f'checkpoint_{args.epochs}.pt')
+    zs_path = os.path.join(args.save_dir, 'checkpoint_0.pt')  
+    ft_path = os.path.join(args.save_dir, f'checkpoint_{args.epochs}.pt')
     if os.path.exists(zs_path) and os.path.exists(ft_path):
         print(f'Skipping fine-tuning because {ft_path} exists.')
         return zs_path, ft_path
@@ -63,8 +65,8 @@ def finetune(args):
 
     # Saving model
     if args.save is not None:
-        os.makedirs(args.save, exist_ok=True)
-        model_path = os.path.join(args.save, args.train_dataset, f'checkpoint_0.pt')
+        os.makedirs(args.save_dir, exist_ok=True)
+        model_path = os.path.join(args.save_dir, f'checkpoint_0.pt')
         model.module.image_encoder.save(model_path)
 
     for epoch in range(args.epochs):
@@ -90,6 +92,9 @@ def finetune(args):
 
             loss = loss_fn(logits, labels)
 
+            if args.wandb:
+                wandb.log({'train/loss_step':loss, 'step':step})
+
             loss.backward()
 
             torch.nn.utils.clip_grad_norm_(params, 1.0)
@@ -108,10 +113,10 @@ def finetune(args):
 
         # Saving model
         if args.save is not None:
-            os.makedirs(args.save, exist_ok=True)
-            model_path = os.path.join(args.save, args.train_dataset, f'checkpoint_{epoch+1}.pt')
+            os.makedirs(args.save_dir, exist_ok=True)
+            model_path = os.path.join(args.save_dir, f'checkpoint_{epoch+1}.pt')
             image_encoder.save(model_path)
-            optim_path = os.path.join(args.save, args.train_dataset, f'optim_{epoch+1}.pt')
+            optim_path = os.path.join(args.save_dir, f'optim_{epoch+1}.pt')
             torch.save(optimizer.state_dict(), optim_path)
 
         # Evaluate
@@ -120,8 +125,8 @@ def finetune(args):
             evaluate(image_encoder, args)
 
     if args.save is not None:
-        zs_path = os.path.join(args.save, args.train_dataset, 'checkpoint_0.pt')  
-        ft_path = os.path.join(args.save, args.train_dataset, f'checkpoint_{args.epochs}.pt')    
+        zs_path = os.path.join(args.save_dir, 'checkpoint_0.pt')  
+        ft_path = os.path.join(args.save_dir, f'checkpoint_{args.epochs}.pt')    
         return zs_path, ft_path
 
 

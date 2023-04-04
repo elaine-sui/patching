@@ -16,14 +16,47 @@ python src/patch.py   \
 """
 
 import os
+import sys
+
+sys.path.append(os.getcwd())
 
 from src.eval import evaluate
 from src.finetune import finetune
 from src.modeling import ImageEncoder
 from src.args import parse_arguments
 
+from datetime import datetime
+import wandb
+
+def modify_args(args):
+    date_str = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+    args.datetime = date_str
+
+    model_name_safe = args.model.replace('/', '-')
+    args.exp_name = model_name_safe + "_" + args.train_dataset + "/" + date_str
+
+    args.save_dir = os.path.join(args.save, args.train_dataset, args.datetime)
+    args.results_db = os.path.join(args.save_dir, args.results_db)
+
+    return args
+
+def wandb_init(args):
+    wandb.init(
+        name=args.exp_name,
+        project="patching",
+        config=args
+    )
+    
+
 def patch(args):
     assert args.save is not None, 'Please provide a path to store models'
+
+    # Modify args
+    args = modify_args(args)
+
+    # Wandb init
+    if args.wandb:
+        wandb_init(args)
 
     # First, fine-tune    
     zeroshot_checkpoint, finetuned_checkpoint = finetune(args)
@@ -54,7 +87,7 @@ def patch(args):
         finetuned.load_state_dict(theta)
 
         # save model
-        finetuned.save(os.path.join(args.save, args.train_dataset, f'patched_alpha={alpha:.3f}.pt'))
+        finetuned.save(os.path.join(args.save, args.train_dataset, args.datetime, f'patched_alpha={alpha:.3f}.pt'))
 
         # evaluate
         evaluate(finetuned, args)

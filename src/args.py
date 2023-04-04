@@ -101,6 +101,11 @@ def parse_arguments():
     parser.add_argument(
         "--eval-every-epoch", action="store_true", default=False,
     )
+
+    parser.add_argument(
+        "--wandb", action="store_true", default=False, help='add logging to wandb'
+    )
+    
     parsed_args = parser.parse_args()
     parsed_args.device = "cuda" if torch.cuda.is_available() else "cpu"
     

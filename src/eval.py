@@ -11,6 +11,8 @@ from src.modeling import ImageClassifier
 
 from src.datasets.registry import get_dataset
 
+import wandb
+
 
 def eval_single_dataset(image_encoder, dataset_name, args):
     classification_head = get_classification_head(args, dataset_name)
@@ -48,6 +50,9 @@ def eval_single_dataset(image_encoder, dataset_name, args):
         top1 = correct / n
 
     metrics = {'top1': top1}
+
+    if args.wandb:
+        wandb.log({f'val/{dataset_name}_top1_acc': top1})
     
     return metrics
 

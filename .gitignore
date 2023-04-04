@@ -2,6 +2,9 @@ output
 plots
 results
 models
+wandb
+logs
+*.out
 *.jsonl
 
 # Byte-compiled / optimized / DLL files

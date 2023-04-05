@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+from datetime import datetime
 
 sys.path.append(os.getcwd())
 
@@ -67,7 +68,8 @@ def sequential_patch(args, zeroshot_checkpoint, finetuned_checkpoints):
 
 if __name__ == '__main__':
     args = parse_arguments()
-    args.save_dir = os.path.join(args.save, "sequential_patch")
+    date_str = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+    args.save_dir = os.path.join(args.save, "sequential_patch", date_str)
     args.results_db = os.path.join(args.save_dir, args.results_db)
 
     os.makedirs(args.save_dir, exist_ok=True)
@@ -79,5 +81,12 @@ if __name__ == '__main__':
         "/pasteur/u/esui/patching/models/patch/ViTB32/SVHNVal/2023_04_04-17_52_45/checkpoint_4.pt",
         "/pasteur/u/esui/patching/models/patch/ViTB32/GTSRBVal/2023_04_04-17_52_45/checkpoint_9.pt"
     ]
+
+    ordering = list(np.random.permutation(len(finetuned_checkpoints)))
+
+    args.eval_datasets = [args.eval_datasets[0]] + [args.eval_datasets[1:][i] for i in ordering]
+    finetuned_checkpoints = [finetuned_checkpoints[i] for i in ordering]
+
+    print("Order of datasets seen:", args.eval_datasets)
 
     sequential_patch(args, zeroshot_checkpoint, finetuned_checkpoints)

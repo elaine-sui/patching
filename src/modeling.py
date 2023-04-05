@@ -66,17 +66,18 @@ class ClassificationHead(torch.nn.Linear):
 
 
 class ImageClassifier(torch.nn.Module):
-    def __init__(self, image_encoder, classification_head):
+    def __init__(self, image_encoder, classification_heads):
         super().__init__()
         self.image_encoder = image_encoder
-        self.classification_head = classification_head
+        self.classification_heads = classification_heads # dictionary of dataset to classification head
         if self.image_encoder is not None:
             self.train_preprocess = self.image_encoder.train_preprocess
             self.val_preprocess = self.image_encoder.val_preprocess
 
     def freeze_head(self):
-        self.classification_head.weight.requires_grad_(False)
-        self.classification_head.bias.requires_grad_(False)
+        for dataset_name, classification_head in self.classification_heads.items():
+            classification_head.weight.requires_grad_(False)
+            classification_head.bias.requires_grad_(False)
 
     def freeze_all_except(self, params_to_unfreeze=['last'], restrict_first_k_neurons=False, k=50):
         if 'last' in params_to_unfreeze:
@@ -93,8 +94,10 @@ class ImageClassifier(torch.nn.Module):
             assert self.image_encoder.model.token_embedding.weight.requires_grad == True
 
     def forward(self, inputs):
-        features = self.image_encoder(inputs)
-        outputs = self.classification_head(features)
+        features = {dataset_name : self.image_encoder(inputs_) for dataset_name, inputs_ in inputs.items()}
+        outputs = {}
+        for dataset_name, features_ in features.items():
+            outputs[dataset_name] = self.classification_heads[dataset_name](features_)
         return outputs
 
     def __call__(self, inputs):

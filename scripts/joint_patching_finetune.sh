@@ -1,7 +1,7 @@
 python src/patch.py   \
     --train-dataset=CarsVal,GTSRBVal,KITTIVal,MNISTVal,SVHNVal  \
     --eval-every-epoch \
-    --epochs=2  \
+    --epochs=40  \
     --lr=0.00001  \
     --warmup_length 200 \
     --batch-size=128  \

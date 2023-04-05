@@ -95,7 +95,7 @@ def patch(args):
         finetuned.load_state_dict(theta)
 
         # save model
-        finetuned.save(os.path.join(args.save, args.train_dataset, args.datetime, f'patched_alpha={alpha:.3f}.pt'))
+        finetuned.save(os.path.join(args.save_dir, f'patched_alpha={alpha:.3f}.pt'))
 
         # evaluate
         evaluate(finetuned, args)

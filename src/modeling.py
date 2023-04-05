@@ -80,14 +80,24 @@ class ImageClassifier(torch.nn.Module):
             classification_head.bias.requires_grad_(False)
 
     def freeze_all_except(self, params_to_unfreeze=['last'], restrict_first_k_neurons=False, k=50):
+
+        def has_name_starts_with_param(name, params_lst):
+            for p in params_lst:
+                if name.startswith(p):
+                    return True
+            
+            return False
+
+        # print([name for name, _ in self.image_encoder.named_parameters()])
+        
         if 'last' in params_to_unfreeze:
             idx = params_to_unfreeze.index('last')
             params_to_unfreeze[idx] = 'model.token_embedding.weight'
-            params_to_unfreeze.extend(['model.ln_final.weight', 'model.ln_final.bias'])
+            params_to_unfreeze.extend(['model.visual.ln_post.weight', 'model.visual.ln_post.bias', 'model.ln_final.weight', 'model.ln_final.bias'])
+            # params_to_unfreeze.append('model.visual.transformer.resblocks.11.mlp.c_proj')
         
         for name, param in self.image_encoder.named_parameters():
-            if name not in params_to_unfreeze:
-                param.requires_grad_(False)
+            param.requires_grad_(has_name_starts_with_param(name, params_to_unfreeze))
         
         # Sanity check
         if 'model.token_embedding.weight' in params_to_unfreeze:

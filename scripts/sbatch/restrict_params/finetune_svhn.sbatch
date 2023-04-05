@@ -8,11 +8,11 @@
 #SBATCH --account=pasteur
 #SBATCH --gres=gpu:1
 
-#SBATCH --job-name="eval_sequential"
+#SBATCH --job-name="restrict_patching_svhn"
 #SBATCH --output=logs/log-%j.out # STDOUT
 
 # only use the following if you want email notification
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/eval_sequential_patching.sh
+bash $HOME/patching/scripts/restrict_params/finetune_svhn.sh

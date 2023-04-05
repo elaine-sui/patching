@@ -36,12 +36,12 @@ def eval_single_dataset(image_encoder, dataset_name, args):
         top1, correct, n = 0., 0., 0.
         for i, data in batched_data:
             data = maybe_dictionarize(data)
-            x = data['images'].to(device)
+            x = {dataset_name : data['images'].to(device)}
             y = data['labels'].to(device)
 
             logits = utils.get_logits(x, model)
 
-            pred = logits.argmax(dim=1, keepdim=True).to(device)
+            pred = logits[dataset_name].argmax(dim=1, keepdim=True).to(device)
 
             correct += pred.eq(y.view_as(pred)).sum().item()
             

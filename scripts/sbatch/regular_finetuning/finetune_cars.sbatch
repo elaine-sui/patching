@@ -8,11 +8,11 @@
 #SBATCH --account=pasteur
 #SBATCH --gres=gpu:1
 
-#SBATCH --job-name="joint_patching"
+#SBATCH --job-name="patching_cars"
 #SBATCH --output=logs/log-%j.out # STDOUT
 
 # only use the following if you want email notification
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/joint_patching_finetune.sh
+bash $HOME/patching/scripts/regular_finetuning/finetune_cars.sh

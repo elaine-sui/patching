@@ -56,7 +56,7 @@ def torch_load(save_path, device=None):
 def get_logits(inputs, classifier):
     assert callable(classifier)
     if hasattr(classifier, 'to'):
-        classifier = classifier.to(inputs.device)
+        classifier = classifier.to(list(inputs.values())[0].device)
     return classifier(inputs)
 
 

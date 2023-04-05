@@ -8,11 +8,11 @@
 #SBATCH --account=pasteur
 #SBATCH --gres=gpu:1
 
-#SBATCH --job-name="patching_mnist"
+#SBATCH --job-name="patching_kitti"
 #SBATCH --output=logs/log-%j.out # STDOUT
 
 # only use the following if you want email notification
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/finetune_mnist.sh
+bash $HOME/patching/scripts/regular_finetuning/finetune_kitti.sh

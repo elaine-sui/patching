@@ -38,8 +38,13 @@ def modify_args(args):
         train_dataset_str = args.train_dataset[0]
     else:
         train_dataset_str = "joint_" + "_".join(args.train_dataset)
-    
-    args.exp_name = f"{model_name_safe}_{train_dataset_str}/{date_str}"
+
+    args.exp_name = model_name_safe
+    if args.params_to_unfreeze is not None:
+        unfreeze_str = '_'.join(args.params_to_unfreeze)
+        args.exp_name += f"_unfreeze_{unfreeze_str}"
+
+    args.exp_name += f"_{train_dataset_str}/{date_str}"
 
     args.save_dir = os.path.join(args.save, train_dataset_str, args.datetime)
     args.results_db = os.path.join(args.save_dir, args.results_db)

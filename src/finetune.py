@@ -64,8 +64,13 @@ def finetune(args):
         loss_fn = LabelSmoothing(args.ls)
     else:
         loss_fn = torch.nn.CrossEntropyLoss()
-
+    
     params = [p for p in model.parameters() if p.requires_grad]
+    param_names = [n for n, p in model.named_parameters() if p.requires_grad]
+    print("="*80)
+    print("Tuneable params:", param_names)
+    print("="*80)
+
     optimizer = torch.optim.AdamW(params, lr=args.lr, weight_decay=args.wd)
 
     scheduler = cosine_lr(optimizer, args.lr, args.warmup_length, args.epochs * num_batches_total)

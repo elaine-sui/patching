@@ -104,7 +104,7 @@ def parse_arguments():
     )
 
     parser.add_argument(
-        "--params_to_unfreeze", type=list, default=None, help='parameters to unfreeze during finetuning'
+        "--params_to_unfreeze", type=lambda x: x.split(","), default=None, help='parameters to unfreeze during finetuning'
     )
 
     parser.add_argument(

@@ -1,11 +1,12 @@
 python src/patch.py   \
-    --train-dataset=MNIST  \
+    --train-dataset=MNISTVal  \
+    --eval-every-epoch \
     --epochs=5  \
     --lr=0.00001  \
     --warmup_length 200 \
     --batch-size=128  \
     --model=ViT-B/32  \
-    --eval-datasets=ImageNet,MNIST  \
+    --eval-datasets=ImageNetVal,MNISTVal  \
     --results-db=results.jsonl  \
     --save=/pasteur/u/esui/patching/models/patch/ViTB32  \
     --data-location=/pasteur/u/esui/data \

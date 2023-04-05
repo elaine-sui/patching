@@ -103,6 +103,10 @@ def parse_arguments():
     )
 
     parser.add_argument(
+        "--params_to_unfreeze", type=list, default=None, help='parameters to unfreeze during finetuning'
+    )
+
+    parser.add_argument(
         "--wandb", action="store_true", default=False, help='add logging to wandb'
     )
     

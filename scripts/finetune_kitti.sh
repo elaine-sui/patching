@@ -1,11 +1,12 @@
 python src/patch.py   \
-    --train-dataset=KITTI  \
-    --epochs=41  \
+    --train-dataset=KITTIVal  \
+    --eval-every-epoch \
+    --epochs=40  \
     --lr=0.00001  \
     --warmup_length 200 \
     --batch-size=128  \
     --model=ViT-B/32  \
-    --eval-datasets=ImageNet,KITTI  \
+    --eval-datasets=ImageNetVal,KITTIVal  \
     --results-db=results.jsonl  \
     --save=/pasteur/u/esui/patching/models/patch/ViTB32  \
     --data-location=/pasteur/u/esui/data \

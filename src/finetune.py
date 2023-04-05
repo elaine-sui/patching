@@ -38,6 +38,9 @@ def finetune(args):
 
     model.freeze_head()
 
+    if args.params_to_unfreeze is not None:
+        model.freeze_all_except(args.params_to_unfreeze)
+
     preprocess_fn = model.train_preprocess
     print_every = 100
 

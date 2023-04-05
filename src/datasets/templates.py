@@ -243,5 +243,8 @@ dataset_to_template = {
 
 
 def get_templates(dataset_name):
+    if dataset_name.endswith('Val'):
+        dataset_name = dataset_name.split('Val')[0]
+
     assert dataset_name in dataset_to_template, f'Unsupported dataset: {dataset_name}'
     return dataset_to_template[dataset_name]

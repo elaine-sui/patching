@@ -33,7 +33,7 @@ def modify_args(args):
     args.datetime = date_str
 
     model_name_safe = args.model.replace('/', '-')
-    args.exp_name = model_name_safe + "_" + args.train_dataset + "/" + date_str
+    args.exp_name = f"{model_name_safe}_{args.train_dataset}/{date_str}"
 
     args.save_dir = os.path.join(args.save, args.train_dataset, args.datetime)
     args.results_db = os.path.join(args.save_dir, args.results_db)
@@ -73,6 +73,8 @@ def patch(args):
 
     alphas = args.alpha
     for alpha in alphas:
+        args.alpha = alpha
+
         print('='*100)
         print(f'Evaluating with alpha={alpha:.2f}')
         args.alpha = alpha

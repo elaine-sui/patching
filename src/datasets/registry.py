@@ -2,7 +2,9 @@ import sys
 import inspect
 import random
 import torch
-import copy
+from copy import copy
+
+from torch.utils.data import random_split
 
 from src.datasets.cars import Cars
 from src.datasets.cifar10 import CIFAR10
@@ -89,7 +91,7 @@ def get_dataset(dataset_name, preprocess, location, batch_size=128, num_workers=
             dataset_class = registry[dataset_name]
         else:
             base_dataset_name = dataset_name.split('Val')[0]
-            base_dataset = get_dataset(base_dataset_name)
+            base_dataset = get_dataset(base_dataset_name, preprocess, location, batch_size, num_workers, val_fraction, max_val_samples)
             dataset = split_train_into_train_val(
                 base_dataset, dataset_name, batch_size, num_workers, val_fraction, max_val_samples)
             return dataset

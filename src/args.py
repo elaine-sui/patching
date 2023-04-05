@@ -110,6 +110,14 @@ def parse_arguments():
     parser.add_argument(
         "--wandb", action="store_true", default=False, help='add logging to wandb'
     )
+
+    parser.add_argument(
+        "--restrict_grad_dims", action="store_true", default=False,
+    )
+
+    parser.add_argument(
+        "--k", type=int, default=50,
+    )
     
     parsed_args = parser.parse_args()
     parsed_args.device = "cuda" if torch.cuda.is_available() else "cpu"

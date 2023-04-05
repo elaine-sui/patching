@@ -18,6 +18,12 @@ import src.datasets as datasets
 
 import wandb
 
+def restrict_grad_dims(params, k=50):
+    for param in params:
+        if param.grad is not None:
+            if len(param.shape) == 2:
+                param.grad[:, k:] = 0.
+
 
 def finetune(args):
     # Check if checkpoints already exist
@@ -120,6 +126,9 @@ def finetune(args):
                 wandb.log({'train/loss_step':loss, 'step':step})
 
             loss.backward()
+
+            if args.restrict_grad_dims:
+                restrict_grad_dims(params, k=args.k)
 
             torch.nn.utils.clip_grad_norm_(params, 1.0)
 

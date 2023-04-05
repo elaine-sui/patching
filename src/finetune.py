@@ -5,7 +5,7 @@ import torch
 
 from src.args import parse_arguments
 from src.datasets.common import get_dataloader, maybe_dictionarize
-from src.datasets.registry import get_dataset
+from src.datasets.registry import get_datasets
 from eval import evaluate
 from src.modeling import ImageEncoder, ImageClassifier
 from src.utils import cosine_lr, LabelSmoothing
@@ -44,7 +44,7 @@ def finetune(args):
     preprocess_fn = model.train_preprocess
     print_every = 100
 
-    dataset = get_dataset(
+    dataset = get_datasets(
         args.train_dataset,
         preprocess_fn,
         location=args.data_location,

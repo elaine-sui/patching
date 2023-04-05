@@ -33,9 +33,15 @@ def modify_args(args):
     args.datetime = date_str
 
     model_name_safe = args.model.replace('/', '-')
-    args.exp_name = f"{model_name_safe}_{args.train_dataset}/{date_str}"
 
-    args.save_dir = os.path.join(args.save, args.train_dataset, args.datetime)
+    if len(args.train_dataset) == 1:
+        train_dataset_str = args.train_dataset[0]
+    else:
+        train_dataset_str = "joint_" + "_".join(args.train_dataset)
+    
+    args.exp_name = f"{model_name_safe}_{train_dataset_str}/{date_str}"
+
+    args.save_dir = os.path.join(args.save, train_dataset_str, args.datetime)
     args.results_db = os.path.join(args.save_dir, args.results_db)
 
     return args

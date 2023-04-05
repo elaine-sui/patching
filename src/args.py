@@ -20,7 +20,8 @@ def parse_arguments():
     parser.add_argument(
         "--train-dataset",
         default=None,
-        help="Which dataset to patch on.",
+        type=lambda x: x.split(","),
+        help="Which datasets to patch on. Split by comma, e.g. MNIST,EuroSAT. If multiple, then concatenate the datasets",
     )
     parser.add_argument(
         "--exp_name",

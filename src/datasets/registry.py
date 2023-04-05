@@ -5,6 +5,7 @@ import torch
 from copy import copy
 
 from torch.utils.data import random_split
+from torch.utils.data.dataset import ConcatDataset
 
 from src.datasets.cars import Cars
 from src.datasets.cifar10 import CIFAR10
@@ -82,6 +83,35 @@ def split_train_into_train_val(dataset, new_dataset_class_name, batch_size, num_
     new_dataset.classnames = copy(dataset.classnames)
 
     return new_dataset
+
+def get_datasets(dataset_names, preprocess, location, batch_size=128, num_workers=16, val_fraction=0.1, max_val_samples=5000):
+    datasets = []
+    for dataset_name in dataset_names:
+        datasets.append(get_dataset(dataset_name, preprocess, location, batch_size, num_workers, val_fraction, max_val_samples))
+
+    joint_dataset_name = "_".join(dataset_names)
+    joint_dataset_class = type(joint_dataset_name, (GenericDataset, ), {})
+    joint_dataset_class.train_dataset = ConcatDataset([d.train_dataset for d in datasets])
+    joint_dataset_class.train_loader = torch.utils.data.DataLoader(
+        joint_dataset_class.train_dataset,
+        shuffle=True,
+        batch_size=batch_size,
+        num_workers=num_workers,
+    )
+
+    joint_dataset_class.test_dataset = ConcatDataset([d.test_dataset for d in datasets])
+    joint_dataset_class.test_loader = torch.utils.data.DataLoader(
+        joint_dataset_class.test_dataset,
+        batch_size=batch_size,
+        num_workers=num_workers
+    )
+
+    joint_class_names = []
+    for dataset in datasets:
+        joint_class_names.extend(copy(dataset.classnames))
+    joint_dataset_class.classnames = joint_class_names
+
+    return joint_dataset_class
 
 
 def get_dataset(dataset_name, preprocess, location, batch_size=128, num_workers=16, val_fraction=0.1, max_val_samples=5000):

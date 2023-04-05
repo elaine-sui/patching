@@ -15,7 +15,7 @@ import wandb
 
 
 def eval_single_dataset(image_encoder, dataset_name, args):
-    classification_head = get_classification_head(args, dataset_name)
+    classification_head = get_classification_head(args, [dataset_name])
     model = ImageClassifier(image_encoder, classification_head)
 
     model.eval()
@@ -57,6 +57,8 @@ def eval_single_dataset(image_encoder, dataset_name, args):
     return metrics
 
 def evaluate(image_encoder, args):
+
+    avg_acc = 0.
     if args.eval_datasets is None:
         return
     info = vars(args)
@@ -67,6 +69,7 @@ def evaluate(image_encoder, args):
 
         if 'top1' in results:
             print(f"{dataset_name} Top-1 accuracy: {results['top1']:.4f}")
+            avg_acc += results['top1']
         for key, val in results.items():
             if 'worst' in key or 'f1' in key.lower() or 'pm0' in key:
                 print(f"{dataset_name} {key}: {val:.4f}")
@@ -82,4 +85,4 @@ def evaluate(image_encoder, args):
     else:
         print('Results not saved (to do so, use --results_db to specify a path).')
 
-    return info
+    return info, avg_acc / len(args.eval_datasets)

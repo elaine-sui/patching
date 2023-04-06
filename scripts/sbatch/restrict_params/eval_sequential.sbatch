@@ -15,4 +15,6 @@
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/restrict_params/eval_sequential_patching.sh
+bash $HOME/patching/scripts/restrict_params_last/eval_sequential_patching.sh
+bash $HOME/patching/scripts/restrict_params_low/eval_sequential_patching.sh
+bash $HOME/patching/scripts/restrict_params_middle/eval_sequential_patching.sh

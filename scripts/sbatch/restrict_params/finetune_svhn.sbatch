@@ -15,6 +15,7 @@
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/restrict_params_low/finetune_svhn.sh
-bash $HOME/patching/scripts/restrict_params_middle/finetune_svhn.sh
+bash $HOME/patching/scripts/restrict_params_last_k_50/finetune_svhn.sh
+# bash $HOME/patching/scripts/restrict_params_low/finetune_svhn.sh
+# bash $HOME/patching/scripts/restrict_params_middle/finetune_svhn.sh
 # bash $HOME/patching/scripts/restrict_params_last/finetune_svhn.sh

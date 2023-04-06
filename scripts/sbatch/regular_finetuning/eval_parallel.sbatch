@@ -8,14 +8,11 @@
 #SBATCH --account=pasteur
 #SBATCH --gres=gpu:1
 
-#SBATCH --job-name="restrict_patching_mnist"
+#SBATCH --job-name="eval_parallel"
 #SBATCH --output=logs/log-%j.out # STDOUT
 
 # only use the following if you want email notification
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/restrict_params_last_k_50/finetune_mnist.sh
-# bash $HOME/patching/scripts/restrict_params_low/finetune_mnist.sh
-# bash $HOME/patching/scripts/restrict_params_middle/finetune_mnist.sh
-# bash $HOME/patching/scripts/restrict_params_last/finetune_mnist.sh
+bash $HOME/patching/scripts/regular_finetuning/eval_parallel_patching.sh

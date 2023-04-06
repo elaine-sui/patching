@@ -11,20 +11,22 @@ from src.modeling import ImageEncoder
 from src.args import parse_arguments
 
 def wandb_init(args):
-    date_str = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
     model_name_safe = args.model.replace('/', '-')
 
-    if len(args.train_dataset) == 1:
-        train_dataset_str = args.train_dataset[0]
+    if len(args.eval_datasets) == 1:
+        eval_dataset_str = args.eval_datasets[0]
     else:
-        train_dataset_str = "sequential_" + "_".join(args.train_dataset)
+        eval_dataset_str = "sequential_" + "_".join(args.eval_datasets)
 
     args.exp_name = model_name_safe
     if args.params_to_unfreeze is not None:
         unfreeze_str = '_'.join(args.params_to_unfreeze)
         args.exp_name += f"_unfreeze_{unfreeze_str}"
+    
+    if args.restrict_grad_dims:
+        args.exp_name += f"_restrict_k_{args.k}_dims"
 
-    args.exp_name += f"_{train_dataset_str}/{date_str}"
+    args.exp_name += f"_{eval_dataset_str}_seed_{args.seed}/{args.datetime}"
 
     wandb.init(
         name=args.exp_name,
@@ -36,6 +38,11 @@ def sequential_patch(args, zeroshot_checkpoint, finetuned_checkpoints):
     # Init wandb
     if args.wandb:
         wandb_init(args)
+    
+    print(f"=> Order of datasets seen:", args.eval_datasets)
+    print(f"=> Order of patching checkpoints seen:", finetuned_checkpoints)
+
+    args.wandb = False # Don't log the actual metrics (just log console)
 
     # Load models
     zeroshot = ImageEncoder.load(zeroshot_checkpoint)
@@ -72,7 +79,7 @@ def sequential_patch(args, zeroshot_checkpoint, finetuned_checkpoints):
             finetuned.load_state_dict(theta)
 
             # save model
-            finetuned.save(os.path.join(args.save_dir, f'sequential_patch_it_{i}_alpha={alpha:.3f}.pt'))
+            finetuned.save(os.path.join(args.save_dir, f'it_{i}_alpha={alpha:.3f}.pt'))
 
             # evaluate
             _, avg_acc = evaluate(finetuned, args)
@@ -95,9 +102,9 @@ def sequential_patch(args, zeroshot_checkpoint, finetuned_checkpoints):
 
 if __name__ == '__main__':
     args = parse_arguments()
-    date_str = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+    args.datetime = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 
-    args.save_dir = os.path.join(args.save, "sequential_patch", date_str)
+    args.save_dir = os.path.join(args.save, "sequential_patch", args.datetime)
     args.results_db = os.path.join(args.save_dir, args.results_db)
 
     os.makedirs(args.save_dir, exist_ok=True)
@@ -120,8 +127,5 @@ if __name__ == '__main__':
                 break
 
     finetuned_checkpoints = [dataset_to_ckpt[args.eval_datasets[i+1]] for i in range(len(finetuned_checkpoints))]
-
-    print(f"=> Order of datasets seen:", args.eval_datasets)
-    print(f"=> Order of patching checkpoints seen:", finetuned_checkpoints)
 
     sequential_patch(args, zeroshot_checkpoint, finetuned_checkpoints)

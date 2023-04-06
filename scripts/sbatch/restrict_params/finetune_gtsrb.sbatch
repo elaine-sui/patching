@@ -15,6 +15,7 @@
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/restrict_params_low/finetune_gtsrb.sh
-bash $HOME/patching/scripts/restrict_params_middle/finetune_gtsrb.sh
+bash $HOME/patching/scripts/restrict_params_last_k_50/finetune_gtsrb.sh
+# bash $HOME/patching/scripts/restrict_params_low/finetune_gtsrb.sh
+# bash $HOME/patching/scripts/restrict_params_middle/finetune_gtsrb.sh
 # bash $HOME/patching/scripts/restrict_params_last/finetune_gtsrb.sh

@@ -43,6 +43,9 @@ def modify_args(args):
     if args.params_to_unfreeze is not None:
         unfreeze_str = '_'.join(args.params_to_unfreeze)
         args.exp_name += f"_unfreeze_{unfreeze_str}"
+    
+    if args.restrict_grad_dims:
+        args.exp_name += f"_restrict_k_{args.k}_dims"
 
     args.exp_name += f"_{train_dataset_str}/{date_str}"
 
@@ -103,7 +106,7 @@ def patch(args):
         finetuned.save(os.path.join(args.save_dir, f'patched_alpha={alpha:.3f}.pt'))
 
         # evaluate
-        args.wandb = False
+        args.wandb = False # Don't log the actual metrics (just log console)
         evaluate(finetuned, args)
 
 

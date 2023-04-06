@@ -73,21 +73,17 @@ if __name__ == '__main__':
     args.results_db = os.path.join(args.save_dir, args.results_db)
 
     os.makedirs(args.save_dir, exist_ok=True)
-    zeroshot_checkpoint = "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_04-17_52_45/checkpoint_0.pt"
-    finetuned_checkpoints = [
-        "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_04-17_52_45/checkpoint_5.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/CarsVal/2023_04_04-17_52_40/checkpoint_35.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/KITTIVal/2023_04_04-17_52_40/checkpoint_40.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/SVHNVal/2023_04_04-17_52_45/checkpoint_4.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/GTSRBVal/2023_04_04-17_52_45/checkpoint_9.pt"
-    ]
+    zeroshot_checkpoint = args.zeroshot_ckpt
+    finetuned_checkpoints = [args.mnist_ckpt, args.cars_ckpt, args.kitti_ckpt, args.svhn_ckpt, args.gtsrb_ckpt]
+
     np.random.seed(args.seed)
+    print(f"=> Random Seed Set to {args.seed}")
 
     ordering = list(np.random.permutation(len(finetuned_checkpoints)))
 
     args.eval_datasets = [args.eval_datasets[0]] + [args.eval_datasets[1:][i] for i in ordering]
     finetuned_checkpoints = [finetuned_checkpoints[i] for i in ordering]
 
-    print("Order of datasets seen:", args.eval_datasets)
+    print(f"=> Order of datasets seen:", args.eval_datasets)
 
     sequential_patch(args, zeroshot_checkpoint, finetuned_checkpoints)

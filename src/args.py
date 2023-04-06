@@ -122,6 +122,31 @@ def parse_arguments():
     parser.add_argument(
         "--seed", type=int, default=1234,
     )
+
+    # For parallel and sequential patching
+    parser.add_argument(
+        "--zeroshot_ckpt", type=str, default=None
+    )
+
+    parser.add_argument(
+        "--mnist_ckpt", type=str, default=None
+    )
+
+    parser.add_argument(
+        "--kitti_ckpt", type=str, default=None
+    )
+
+    parser.add_argument(
+        "--cars_ckpt", type=str, default=None
+    )
+
+    parser.add_argument(
+        "--svhn_ckpt", type=str, default=None
+    )
+
+    parser.add_argument(
+        "--gtsrb_ckpt", type=str, default=None
+    )
     
     parsed_args = parser.parse_args()
     parsed_args.device = "cuda" if torch.cuda.is_available() else "cpu"

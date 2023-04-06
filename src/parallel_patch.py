@@ -53,13 +53,6 @@ def parallel_patch(args, zeroshot_checkpoint, finetuned_checkpoints):
 if __name__ == '__main__':
     args = parse_arguments()
     args.results_db = os.path.join(args.save, "parallel_patched", args.results_db)
-    zeroshot_checkpoint = "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_04-17_52_45/checkpoint_0.pt"
-    finetuned_checkpoints = [
-        "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_04-17_52_45/checkpoint_5.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/CarsVal/2023_04_04-17_52_40/checkpoint_35.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/KITTIVal/2023_04_04-17_52_40/checkpoint_40.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/SVHNVal/2023_04_04-17_52_45/checkpoint_4.pt",
-        "/pasteur/u/esui/patching/models/patch/ViTB32/GTSRBVal/2023_04_04-17_52_45/checkpoint_9.pt"
-    ]
 
-    parallel_patch(args, zeroshot_checkpoint, finetuned_checkpoints)
+    patching_ckpts = [args.mnist_ckpt, args.cars_ckpt, args.kitti_ckpt, args.svhn_ckpt, args.gtsrb_ckpt]
+    parallel_patch(args, args.zeroshot_ckpt, patching_ckpts)

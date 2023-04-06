@@ -118,6 +118,10 @@ def parse_arguments():
     parser.add_argument(
         "--k", type=int, default=50,
     )
+
+    parser.add_argument(
+        "--seed", type=int, default=1234,
+    )
     
     parsed_args = parser.parse_args()
     parsed_args.device = "cuda" if torch.cuda.is_available() else "cpu"

@@ -4,6 +4,7 @@ import random
 from copy import copy
 
 import torch
+import gc
 
 from src.args import parse_arguments
 from src.datasets.common import get_dataloader, maybe_dictionarize, get_dataloaders
@@ -23,6 +24,8 @@ def restrict_grad_dims(params, k=50):
         if param.grad is not None:
             if len(param.shape) == 2:
                 param.grad[:, k:] = 0.
+            else:
+                param.grad[k:] = 0.
 
 
 def finetune(args):
@@ -72,10 +75,10 @@ def finetune(args):
         loss_fn = torch.nn.CrossEntropyLoss()
     
     params = [p for p in model.parameters() if p.requires_grad]
-    param_names = [n for n, p in model.named_parameters() if p.requires_grad]
-    print("="*80)
-    print("Tuneable params:", param_names)
-    print("="*80)
+    # param_names = [(n, p.shape) for n, p in model.named_parameters() if p.requires_grad]
+    # print("="*80)
+    # print("Tuneable params:", param_names)
+    # print("="*80)
 
     optimizer = torch.optim.AdamW(params, lr=args.lr, weight_decay=args.wd)
 
@@ -126,7 +129,7 @@ def finetune(args):
                 wandb.log({'train/loss_step':loss, 'step':step})
 
             loss.backward()
-
+            
             if args.restrict_grad_dims:
                 restrict_grad_dims(params, k=args.k)
 
@@ -156,6 +159,8 @@ def finetune(args):
         args.current_epoch = epoch
         if args.eval_every_epoch:
             evaluate(image_encoder, args)
+        
+        gc.collect()
 
     if args.save is not None:
         zs_path = os.path.join(args.save_dir, 'checkpoint_0.pt')  

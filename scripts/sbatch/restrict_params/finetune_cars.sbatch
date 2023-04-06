@@ -15,4 +15,6 @@
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/restrict_params/finetune_cars.sh
+bash $HOME/patching/scripts/restrict_params_low/finetune_cars.sh
+bash $HOME/patching/scripts/restrict_params_middle/finetune_cars.sh
+# bash $HOME/patching/scripts/restrict_params_last/finetune_cars.sh

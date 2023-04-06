@@ -81,6 +81,7 @@ if __name__ == '__main__':
         "/pasteur/u/esui/patching/models/patch/ViTB32/SVHNVal/2023_04_04-17_52_45/checkpoint_4.pt",
         "/pasteur/u/esui/patching/models/patch/ViTB32/GTSRBVal/2023_04_04-17_52_45/checkpoint_9.pt"
     ]
+    np.random.seed(args.seed)
 
     ordering = list(np.random.permutation(len(finetuned_checkpoints)))
 

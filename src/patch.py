@@ -103,6 +103,7 @@ def patch(args):
         finetuned.save(os.path.join(args.save_dir, f'patched_alpha={alpha:.3f}.pt'))
 
         # evaluate
+        args.wandb = False
         evaluate(finetuned, args)
 
 

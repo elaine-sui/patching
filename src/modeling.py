@@ -88,22 +88,25 @@ class ImageClassifier(torch.nn.Module):
             
             return False
 
-        # print([name for name, _ in self.image_encoder.named_parameters()])
+        print([name for name, _ in self.image_encoder.named_parameters()])
         
         if 'last' in params_to_unfreeze:
-            idx = params_to_unfreeze.index('last')
-            params_to_unfreeze[idx] = 'model.token_embedding.weight'
+            params_to_unfreeze.remove('last')
+            params_to_unfreeze.append('model.token_embedding.weight')
             params_to_unfreeze.extend(['model.visual.ln_post.weight', 'model.visual.ln_post.bias', 'model.ln_final.weight', 'model.ln_final.bias'])
-        
+            # params_to_unfreeze.extend(['model.visual.transformer.resblocks.11.mlp.c_proj.weight', 'model.visual.transformer.resblocks.11.mlp.c_proj.bias', 'model.visual.transformer.resblocks.11.ln_2.weight'])
+        elif 'low' in params_to_unfreeze:
+            params_to_unfreeze.remove('low')
+            params_to_unfreeze.append('model.visual.transformer.resblocks.0')
+        elif 'middle' in params_to_unfreeze:
+            params_to_unfreeze.remove('middle')
+            params_to_unfreeze.append('model.visual.transformer.resblocks.5')
+
         for name, param in self.image_encoder.named_parameters():
             to_unfreeze = has_name_starts_with_param(name, params_to_unfreeze)
             param.requires_grad_(to_unfreeze)
             if to_unfreeze:
                 param.retain_grad()
-        
-        # Sanity check
-        if 'model.token_embedding.weight' in params_to_unfreeze:
-            assert self.image_encoder.model.token_embedding.weight.requires_grad == True
 
     def forward(self, inputs):
         features = {dataset_name : self.image_encoder(inputs_) for dataset_name, inputs_ in inputs.items()}

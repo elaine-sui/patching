@@ -3,8 +3,8 @@
 #SBATCH --time=72:00:00
 #SBATCH --nodes=1
 #SBATCH --nodelist="pasteur3"
-#SBATCH --cpus-per-task=2
-#SBATCH --mem-per-cpu=16gb
+#SBATCH --cpus-per-task=6
+#SBATCH --mem-per-cpu=8gb
 #SBATCH --account=pasteur
 #SBATCH --gres=gpu:1
 

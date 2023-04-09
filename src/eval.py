@@ -2,9 +2,9 @@ import os
 import json
 
 import torch
-import numpy as np
 
 from src import utils
+from src.utils import LabelSmoothing
 from src.datasets.common import get_dataloader, maybe_dictionarize
 from src.heads import get_classification_head
 from src.modeling import ImageClassifier
@@ -31,15 +31,24 @@ def eval_single_dataset(image_encoder, dataset_name, args):
     batched_data = enumerate(dataloader)
     device = args.device
 
+    if args.ls > 0:
+        loss_fn = LabelSmoothing(args.ls)
+    else:
+        loss_fn = torch.nn.CrossEntropyLoss()
+
     model = model.to(device)
     with torch.no_grad():
         top1, correct, n = 0., 0., 0.
+        total_loss = 0.
         for i, data in batched_data:
             data = maybe_dictionarize(data)
             x = {dataset_name : data['images'].to(device)}
             y = data['labels'].to(device)
 
             logits = utils.get_logits(x, model)
+
+            losses = [loss_fn(logits[name], y) for name in logits]
+            total_loss += sum(losses)
 
             pred = logits[dataset_name].argmax(dim=1, keepdim=True).to(device)
 
@@ -52,7 +61,7 @@ def eval_single_dataset(image_encoder, dataset_name, args):
     metrics = {'top1': top1}
 
     if args.wandb:
-        wandb.log({f'val/{dataset_name}_top1_acc': top1})
+        wandb.log({f'val/{dataset_name}_top1_acc': top1, f'val/{dataset_name}_loss': total_loss})
     
     return metrics
 

@@ -124,6 +124,13 @@ def finetune(args):
             losses = [loss_fn(logits[name], labels[name]) for name in logits]
             loss = sum(losses)
             # loss = loss_fn(logits, labels)
+            
+            for dataset_name in inputs:
+                pred = logits[dataset_name].argmax(dim=1, keepdim=True)
+                acc = pred.eq(labels[dataset_name].view_as(pred)).sum().item() / labels[dataset_name].size(0)
+
+                if args.wandb:
+                    wandb.log({f'train/{dataset_name}_top1_acc': acc, 'step': step})
 
             if args.wandb:
                 wandb.log({'train/loss_step':loss, 'step':step})
@@ -134,8 +141,8 @@ def finetune(args):
                 restrict_grad_dims(params, k=args.k)
 
             torch.nn.utils.clip_grad_norm_(params, 1.0)
-
             optimizer.step()
+            
             batch_time = time.time() - start_time
 
             if i % print_every == 0:

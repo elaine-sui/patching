@@ -8,13 +8,14 @@
 #SBATCH --account=pasteur
 #SBATCH --gres=gpu:1
 
-#SBATCH --job-name="restrict_eval_sequential"
+#SBATCH --job-name="restrict_eval_sequential_k_50"
 #SBATCH --output=logs/log-%j.out # STDOUT
 
 # only use the following if you want email notification
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/restrict_params_last/eval_sequential_patching.sh
-bash $HOME/patching/scripts/restrict_params_low/eval_sequential_patching.sh
-bash $HOME/patching/scripts/restrict_params_middle/eval_sequential_patching.sh
+bash $HOME/patching/scripts/restrict_params_last_k_50/eval_sequential_patching.sh
+# bash $HOME/patching/scripts/restrict_params_last/eval_sequential_patching.sh
+# bash $HOME/patching/scripts/restrict_params_low/eval_sequential_patching.sh
+# bash $HOME/patching/scripts/restrict_params_middle/eval_sequential_patching.sh

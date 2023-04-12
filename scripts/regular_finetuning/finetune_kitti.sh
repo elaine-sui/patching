@@ -6,7 +6,7 @@ python src/patch.py   \
     --warmup_length 200 \
     --batch-size=128  \
     --model=ViT-B/32  \
-    --eval-datasets=ImageNetVal,KITTIVal  \
+    --eval-datasets=ImageNetVal,KITTI  \
     --results-db=results.jsonl  \
     --save=/pasteur/u/esui/patching/models/patch/ViTB32  \
     --data-location=/pasteur/u/esui/data \

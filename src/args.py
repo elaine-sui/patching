@@ -147,6 +147,11 @@ def parse_arguments():
     parser.add_argument(
         "--gtsrb_ckpt", type=str, default=None
     )
+
+    ## Finetuned patching
+    parser.add_argument("--finetuned1_ckpt", type=str, default=None)
+    parser.add_argument("--finetuned2_ckpt", type=str, default=None)
+
     
     parsed_args = parser.parse_args()
     parsed_args.device = "cuda" if torch.cuda.is_available() else "cpu"

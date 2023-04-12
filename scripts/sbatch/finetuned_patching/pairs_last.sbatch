@@ -2,17 +2,17 @@
 #SBATCH --partition=pasteur --qos=normal
 #SBATCH --time=72:00:00
 #SBATCH --nodes=1
-#SBATCH --nodelist="pasteur1"
-#SBATCH --cpus-per-task=6
-#SBATCH --mem-per-cpu=8gb
+#SBATCH --nodelist="pasteur4"
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=16gb
 #SBATCH --account=pasteur
 #SBATCH --gres=gpu:1
 
-#SBATCH --job-name="restrict_middle_joint_patching"
+#SBATCH --job-name="pairs_last"
 #SBATCH --output=logs/log-%j.out # STDOUT
 
 # only use the following if you want email notification
 #SBATCH --mail-user=esui@stanford.edu
 #SBATCH --mail-type=ALL
 
-bash $HOME/patching/scripts/restrict_params_middle/joint_patching_finetune.sh
+bash $HOME/patching/scripts/finetuned_patching/pairs_last.sh

@@ -10,9 +10,9 @@ python src/parallel_patch.py   \
     --restrict_grad_dims \
     --k 50 \
     --wandb \
-    --zeroshot_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_05-14_57_46/checkpoint_0.pt" \
-    --mnist_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_05-14_57_46/checkpoint_5.pt" \
-    --cars_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/CarsVal/2023_04_05-14_57_43/checkpoint_35.pt" \
-    --kitti_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/KITTIVal/2023_04_05-14_57_35/checkpoint_40.pt" \
-    --svhn_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/SVHNVal/2023_04_05-22_17_46/checkpoint_4.pt" \
-    --gtsrb_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/GTSRBVal/2023_04_05-22_17_49/checkpoint_11.pt"
+    --zeroshot_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_06-16_00_20/checkpoint_0.pt" \
+    --mnist_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/MNISTVal/2023_04_06-16_00_20/checkpoint_5.pt" \
+    --cars_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/CarsVal/2023_04_06-16_02_24/checkpoint_35.pt" \
+    --kitti_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/KITTIVal/2023_04_06-16_00_22/checkpoint_40.pt" \
+    --svhn_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/SVHNVal/2023_04_06-16_00_39/checkpoint_4.pt" \
+    --gtsrb_ckpt "/pasteur/u/esui/patching/models/patch/ViTB32/GTSRBVal/2023_04_06-16_00_46/checkpoint_11.pt"

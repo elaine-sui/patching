@@ -2,7 +2,7 @@
 #SBATCH --partition=pasteur --qos=normal
 #SBATCH --time=72:00:00
 #SBATCH --nodes=1
-#SBATCH --nodelist="pasteur2"
+#SBATCH --nodelist="pasteur1"
 #SBATCH --cpus-per-task=6
 #SBATCH --mem-per-cpu=8gb
 #SBATCH --account=pasteur

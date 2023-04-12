@@ -107,7 +107,7 @@ if __name__ == '__main__':
     args = parse_arguments()
 
     if len(args.params_to_unfreeze) == 0 or 'middle' in args.params_to_unfreeze:
-        checkpoints = [args.mnist_ckpt, args.cars.ckpt, args.svhn_ckpt, args.gtsrb_ckpt]
+        checkpoints = [args.mnist_ckpt, args.cars_ckpt, args.svhn_ckpt, args.gtsrb_ckpt]
         eval_datasets = ["MNISTVal", "CarsVal", "SVHNVal", "GTSRBVal"]
     elif 'last' in args.params_to_unfreeze or 'low' in args.params_to_unfreeze:
         checkpoints = [args.mnist_ckpt, args.svhn_ckpt, args.gtsrb_ckpt]

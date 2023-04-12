@@ -1,7 +1,7 @@
 python src/patch_finetuned.py   \
     --batch-size=128  \
     --model=ViT-B/32  \
-    --eval-datasets=MNISTVal,SVHNVal,GTSRBVal  \
+    --eval-datasets=MNISTVal,CarsVal,SVHNVal,GTSRBVal  \
     --results-db=results.jsonl  \
     --save=/pasteur/u/esui/patching/models/patch/ViTB32  \
     --data-location=/pasteur/u/esui/data \

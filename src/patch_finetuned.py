@@ -3,6 +3,7 @@ import sys
 import numpy as np
 from datetime import datetime
 import wandb
+from copy import copy
 from itertools import combinations
 
 sys.path.append(os.getcwd())
@@ -114,6 +115,7 @@ if __name__ == '__main__':
         eval_datasets = ["MNISTVal", "SVHNVal", "GTSRBVal"]
 
     for combo in combinations(range(len(checkpoints)), 2):
+        args = parse_arguments()
         args.finetuned1_ckpt = checkpoints[combo[0]]
         args.finetuned2_ckpt = checkpoints[combo[1]]
 

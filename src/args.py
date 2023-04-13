@@ -148,6 +148,18 @@ def parse_arguments():
         "--gtsrb_ckpt", type=str, default=None
     )
 
+    parser.add_argument(
+        "--train_from_scratch",
+        action="store_true",
+        default=False
+    )
+
+    parser.add_argument(
+        "--openclip_model",
+        type=str,
+        default=None
+    )
+
     ## Finetuned patching
     parser.add_argument("--finetuned1_ckpt", type=str, default=None)
     parser.add_argument("--finetuned2_ckpt", type=str, default=None)

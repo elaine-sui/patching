@@ -34,12 +34,16 @@ def modify_args(args):
 
     model_name_safe = args.model.replace('/', '-')
 
+    args.exp_name = ''
+    if args.train_from_scratch:
+        args.exp_name += "train_from_scratch_"
+
     if len(args.train_dataset) == 1:
         train_dataset_str = args.train_dataset[0]
     else:
         train_dataset_str = "joint_" + "_".join(args.train_dataset)
 
-    args.exp_name = model_name_safe
+    args.exp_name += model_name_safe
     if args.params_to_unfreeze is not None:
         unfreeze_str = '_'.join(args.params_to_unfreeze)
         args.exp_name += f"_unfreeze_{unfreeze_str}"

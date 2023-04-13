@@ -1,6 +1,7 @@
 import torch
 
 import clip.clip as clip
+import open_clip
 
 from src import utils
 
@@ -9,9 +10,18 @@ class ImageEncoder(torch.nn.Module):
     def __init__(self, args, keep_lang=False):
         super().__init__()
 
-        print(f'Loading {args.model} pre-trained weights.')
-        self.model, self.train_preprocess, self.val_preprocess = clip.load(
-            args.model, args.device, jit=False)
+        if args.train_from_scratch:
+            print(f'Loading {args.model} to train from scratch.')
+            self.model, self.train_preprocess, self.val_preprocess = open_clip.create_model_and_transforms(
+                args.model, pretrained=None, device=args.device, jit=False)
+
+            # Override text encoding with open ai pretrained clip -- this is for initializing the classification head
+            model, _, _ = clip.load(args.model, args.device, jit=False)
+            self.model.encode_text = model.encode_text
+        else:
+            print(f'Loading {args.model} pre-trained weights.')
+            self.model, self.train_preprocess, self.val_preprocess = clip.load(
+                args.model, args.device, jit=False)
         
         self.cache_dir = args.cache_dir
 

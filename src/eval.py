@@ -45,7 +45,7 @@ def eval_single_dataset(image_encoder, dataset_name, args):
             x = {dataset_name : data['images'].to(device)}
             y = data['labels'].to(device)
 
-            logits = utils.get_logits(x, model)
+            logits = utils.get_logits(x, model, device=device)
 
             losses = [loss_fn(logits[name], y) for name in logits]
             total_loss += sum(losses)

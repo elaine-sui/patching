@@ -1,0 +1,15 @@
+python src/patch.py   \
+    --train_from_scratch \
+    --train-dataset=GTSRBVal  \
+    --eval-every-epoch \
+    --epochs=11  \
+    --lr=0.00001  \
+    --warmup_length 200 \
+    --batch-size=128  \
+    --model=ViT-B/32  \
+    --eval-datasets=ImageNetVal,GTSRBVal  \
+    --results-db=results.jsonl  \
+    --save=/pasteur/u/esui/patching/models/patch/openclip_ViTB32  \
+    --data-location=/pasteur/u/esui/data \
+    --alpha 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 \
+    --wandb
